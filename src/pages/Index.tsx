@@ -146,7 +146,7 @@ export default function Index() {
                   <div className="flex items-center gap-[18px] mb-4">
                     <div className="flex gap-1">
                       {[...Array(5)].map((_, i) => (
-                        <div key={i} className="w-[26px] h-[26px] rounded-sm bg-[#FFCC00]" />
+                        <Icon key={i} name="Star" size={26} className="text-[#FFCC00] fill-[#FFCC00]" />
                       ))}
                     </div>
                     <span className="text-[16px] text-[#324755]">{review.date}</span>
@@ -416,7 +416,7 @@ export default function Index() {
                 <div className="flex items-center gap-[18px] mb-4">
                   <div className="flex gap-1">
                     {[...Array(5)].map((_, i) => (
-                      <div key={i} className="w-[26px] h-[26px] rounded-sm bg-[#FFCC00]" />
+                      <Icon key={i} name="Star" size={26} className="text-[#FFCC00] fill-[#FFCC00]" />
                     ))}
                   </div>
                   <span className="text-[16px] text-[#324755]">1 октября</span>
