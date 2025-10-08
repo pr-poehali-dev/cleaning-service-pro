@@ -31,6 +31,7 @@ export default function Index() {
   const [selectedRoom, setSelectedRoom] = useState(0);
   const [selectedCleaning, setSelectedCleaning] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
+  const [sliderValue, setSliderValue] = useState(168);
 
   return (
     <div className="min-h-screen bg-[#F8FAFB]">
@@ -252,88 +253,130 @@ export default function Index() {
             Введи параметры квартиры и выбери услугу — система автоматически рассчитает цену
           </p>
 
-          <div className="grid grid-cols-[652px,1fr] gap-8">
-            <div className="space-y-12">
-              <div>
-                <div className="text-[16px] tracking-[-0.02em] text-[#324755] mb-4">Количество комнат:</div>
-                <div className="grid grid-cols-3 gap-5 mb-5">
-                  {roomOptions.slice(0, 3).map((room, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedRoom(idx)}
-                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
-                        selectedRoom === idx ? 'bg-[#324755] text-white' : 'bg-white text-black'
-                      }`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedRoom === idx ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
-                        <div className="flex items-center gap-2">
-                          <span className={`text-[16px] tracking-[-0.02em] ${selectedRoom === idx ? 'font-medium' : ''}`}>{room.rooms}</span>
-                          <span className="text-[14px] tracking-[-0.02em]">{room.area}</span>
-                        </div>
+          <div className="space-y-12">
+            <div>
+              <div className="text-[20px] tracking-[-0.02em] text-[#324755] mb-6">Количество комнат:</div>
+              <div className="grid grid-cols-3 gap-5 mb-5">
+                {roomOptions.slice(0, 3).map((room, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedRoom(idx)}
+                    className={`h-[110px] rounded-[20px] flex items-center justify-center transition-all ${
+                      selectedRoom === idx ? 'bg-[#324755] text-white' : 'bg-[#F8FAFB] text-[#324755]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-[26px] h-[26px] rounded-full border-[2px] flex items-center justify-center ${
+                        selectedRoom === idx ? 'border-[#0294FE]' : 'border-[#324755]/30'
+                      }`}>
+                        {selectedRoom === idx && <div className="w-[12px] h-[12px] rounded-full bg-[#0294FE]" />}
                       </div>
-                    </button>
-                  ))}
-                </div>
-                <div className="grid grid-cols-3 gap-5">
-                  {roomOptions.slice(3).map((room, idx) => (
-                    <button
-                      key={idx + 3}
-                      onClick={() => setSelectedRoom(idx + 3)}
-                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
-                        selectedRoom === idx + 3 ? 'bg-[#324755] text-white' : 'bg-white text-black'
-                      }`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedRoom === idx + 3 ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
-                        <div className="flex items-center gap-2">
-                          <span className={`text-[16px] tracking-[-0.02em] ${selectedRoom === idx + 3 ? 'font-medium' : ''}`}>{room.rooms}</span>
-                          <span className="text-[14px] tracking-[-0.02em]">{room.area}</span>
-                        </div>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-[20px] font-medium tracking-[-0.02em]">{room.rooms}</span>
+                        <span className="text-[16px] tracking-[-0.02em]">{room.area}</span>
                       </div>
-                    </button>
-                  ))}
-                </div>
+                    </div>
+                  </button>
+                ))}
               </div>
-
-              <div>
-                <div className="text-[16px] tracking-[-0.02em] text-[#324755] mb-4">Тип уборки:</div>
-                <div className="grid grid-cols-3 gap-5 mb-5">
-                  {cleaningTypes.slice(0, 3).map((type, idx) => (
-                    <button
-                      key={idx}
-                      onClick={() => setSelectedCleaning(idx)}
-                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
-                        selectedCleaning === idx ? 'bg-[#324755] text-white' : 'bg-white text-black'
-                      }`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedCleaning === idx ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
-                        <span className={`text-[14px] tracking-[-0.02em] ${selectedCleaning === idx ? 'font-medium' : ''}`}>{type.name}</span>
+              <div className="grid grid-cols-3 gap-5">
+                {roomOptions.slice(3).map((room, idx) => (
+                  <button
+                    key={idx + 3}
+                    onClick={() => setSelectedRoom(idx + 3)}
+                    className={`h-[110px] rounded-[20px] flex items-center justify-center transition-all ${
+                      selectedRoom === idx + 3 ? 'bg-[#324755] text-white' : 'bg-[#F8FAFB] text-[#324755]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-[26px] h-[26px] rounded-full border-[2px] flex items-center justify-center ${
+                        selectedRoom === idx + 3 ? 'border-[#0294FE]' : 'border-[#324755]/30'
+                      }`}>
+                        {selectedRoom === idx + 3 && <div className="w-[12px] h-[12px] rounded-full bg-[#0294FE]" />}
                       </div>
-                    </button>
-                  ))}
-                </div>
-                <div className="grid grid-cols-2 gap-5">
-                  {cleaningTypes.slice(3).map((type, idx) => (
-                    <button
-                      key={idx + 3}
-                      onClick={() => setSelectedCleaning(idx + 3)}
-                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
-                        selectedCleaning === idx + 3 ? 'bg-[#324755] text-white' : 'bg-white text-black'
-                      }`}
-                    >
-                      <div className="flex items-center gap-4">
-                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedCleaning === idx + 3 ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
-                        <span className={`text-[14px] tracking-[-0.02em] ${selectedCleaning === idx + 3 ? 'font-medium' : ''}`}>{type.name}</span>
+                      <div className="flex items-baseline gap-2">
+                        <span className="text-[20px] font-medium tracking-[-0.02em]">{room.rooms}</span>
+                        <span className="text-[16px] tracking-[-0.02em]">{room.area}</span>
                       </div>
-                    </button>
-                  ))}
-                </div>
+                    </div>
+                  </button>
+                ))}
               </div>
             </div>
 
-            <div className="relative">
+            <div>
+              <div className="text-[20px] tracking-[-0.02em] text-[#324755] mb-6">Выберите площадь:</div>
+              <div className="relative">
+                <input
+                  type="range"
+                  min="40"
+                  max="250"
+                  value={sliderValue}
+                  onChange={(e) => setSliderValue(Number(e.target.value))}
+                  className="w-full h-2 bg-[#1FD6A4]/30 rounded-full appearance-none cursor-pointer [&::-webkit-slider-thumb]:appearance-none [&::-webkit-slider-thumb]:w-[40px] [&::-webkit-slider-thumb]:h-[40px] [&::-webkit-slider-thumb]:rounded-full [&::-webkit-slider-thumb]:bg-[#1FD6A4] [&::-webkit-slider-thumb]:cursor-pointer [&::-webkit-slider-thumb]:shadow-[0px_4px_12px_rgba(31,214,164,0.4)] [&::-moz-range-thumb]:w-[40px] [&::-moz-range-thumb]:h-[40px] [&::-moz-range-thumb]:rounded-full [&::-moz-range-thumb]:bg-[#1FD6A4] [&::-moz-range-thumb]:border-0 [&::-moz-range-thumb]:cursor-pointer"
+                  style={{
+                    background: `linear-gradient(to right, #1FD6A4 0%, #1FD6A4 ${((sliderValue - 40) / 210) * 100}%, #E0F5EF ${((sliderValue - 40) / 210) * 100}%, #E0F5EF 100%)`
+                  }}
+                />
+              </div>
+              <div className="text-center mt-6">
+                <span className="text-[28px] font-medium text-[#324755]">{sliderValue} м²</span>
+              </div>
+            </div>
+
+            <div>
+              <div className="text-[20px] tracking-[-0.02em] text-[#324755] mb-6">Тип уборки:</div>
+              <div className="grid grid-cols-3 gap-5 mb-5">
+                {cleaningTypes.slice(0, 3).map((type, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setSelectedCleaning(idx)}
+                    className={`h-[110px] rounded-[20px] flex items-center justify-center transition-all ${
+                      selectedCleaning === idx ? 'bg-[#324755] text-white' : 'bg-[#F8FAFB] text-[#324755]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-[26px] h-[26px] rounded-full border-[2px] flex items-center justify-center ${
+                        selectedCleaning === idx ? 'border-[#0294FE]' : 'border-[#324755]/30'
+                      }`}>
+                        {selectedCleaning === idx && <div className="w-[12px] h-[12px] rounded-full bg-[#0294FE]" />}
+                      </div>
+                      <span className="text-[18px] font-medium tracking-[-0.02em]">{type.name}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+              <div className="grid grid-cols-2 gap-5">
+                {cleaningTypes.slice(3).map((type, idx) => (
+                  <button
+                    key={idx + 3}
+                    onClick={() => setSelectedCleaning(idx + 3)}
+                    className={`h-[110px] rounded-[20px] flex items-center justify-center transition-all ${
+                      selectedCleaning === idx + 3 ? 'bg-[#324755] text-white' : 'bg-[#F8FAFB] text-[#324755]'
+                    }`}
+                  >
+                    <div className="flex items-center gap-4">
+                      <div className={`w-[26px] h-[26px] rounded-full border-[2px] flex items-center justify-center ${
+                        selectedCleaning === idx + 3 ? 'border-[#0294FE]' : 'border-[#324755]/30'
+                      }`}>
+                        {selectedCleaning === idx + 3 && <div className="w-[12px] h-[12px] rounded-full bg-[#0294FE]" />}
+                      </div>
+                      <span className="text-[18px] font-medium tracking-[-0.02em]">{type.name}</span>
+                    </div>
+                  </button>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Price Card */}
+      <div className="bg-white py-4 pb-20">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="grid grid-cols-[1fr_652px] gap-8">
+            <div />
+            <div className="relative -mt-12">
               <div className="bg-[#1FD6A4] rounded-[30px] p-10 relative overflow-hidden">
                 <div className="absolute top-10 right-10 w-[160px] h-[160px] rounded-full bg-white/17" style={{ transform: 'rotate(-145.29deg)' }} />
                 <div className="absolute top-0 right-0 w-[73px] h-[73px] rounded-full bg-white/17" style={{ transform: 'rotate(-145.29deg)' }} />
