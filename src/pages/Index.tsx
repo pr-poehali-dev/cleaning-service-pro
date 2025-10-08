@@ -3,6 +3,7 @@ import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import Icon from '@/components/ui/icon';
+import AuthModal from '@/components/AuthModal';
 
 const reviewsData = [
   { id: 1, name: 'Екатерина Скорикова', badge: 'Знаток города 6 уровня', date: '1 октября', avatar: 'Е', color: '#72C3FF', opacity: 0.6, text: 'Ребятам даже не 5 звёзд, а 10. Почистили диван, которому уже лет 11, он как новый. Хотя, предупредили, что какие то пятна могут не вывести, но случилось чудо, и диван новый) Рекомендую...', top: '0px' },
@@ -32,6 +33,7 @@ export default function Index() {
   const [selectedCleaning, setSelectedCleaning] = useState(0);
   const [openFaq, setOpenFaq] = useState<number | null>(null);
   const [sliderValue, setSliderValue] = useState(168);
+  const [authModal, setAuthModal] = useState<'cleaner' | 'client' | 'login' | null>(null);
 
   return (
     <div className="min-h-screen bg-[#F8FAFB]">
@@ -57,8 +59,16 @@ export default function Index() {
           </nav>
 
           <div className="flex items-center gap-[38px]">
-            <button className="text-[18px] text-[#324755] tracking-[-0.02em]">Войти</button>
-            <Button className="bg-[#324755] hover:bg-[#324755]/90 text-white rounded-[15px] h-[71px] px-10 font-medium text-[18px] tracking-[-0.02em]">
+            <button 
+              onClick={() => setAuthModal('login')}
+              className="text-[18px] text-[#324755] tracking-[-0.02em]"
+            >
+              Войти
+            </button>
+            <Button 
+              onClick={() => setAuthModal('cleaner')}
+              className="bg-[#324755] hover:bg-[#324755]/90 text-white rounded-[15px] h-[71px] px-10 font-medium text-[18px] tracking-[-0.02em]"
+            >
               Регистрация
             </Button>
           </div>
@@ -563,6 +573,8 @@ export default function Index() {
           </div>
         </div>
       </div>
+
+      <AuthModal type={authModal} onClose={() => setAuthModal(null)} />
     </div>
   );
 }
