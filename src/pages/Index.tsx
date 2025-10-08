@@ -65,15 +65,15 @@ export default function Index() {
       </div>
 
       {/* Hero Section */}
-      <div className="max-w-[1400px] mx-auto px-8 mt-8 relative">
+      <div className="max-w-[1400px] mx-auto px-8 mt-8">
         <div className="flex items-center gap-3.5 mb-6">
           <div className="w-3 h-3 rounded-full bg-[#1FD6A4] shadow-[0px_4px_19px_rgba(31,214,164,0.36)]" />
           <span className="text-[16px] tracking-[-0.03em] text-[#324755]">Метчер для клинеров и заказчиков</span>
         </div>
 
-        <div className="grid grid-cols-2 gap-8">
-          <div>
-            <h1 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-6 max-w-[761px]">
+        <div className="grid grid-cols-[1fr_600px] gap-8 items-start">
+          <div className="max-w-[761px]">
+            <h1 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-6">
               Чистота, которая приходит по клику, просто выбирай услугу, и клинер уже едет к тебе
             </h1>
             
@@ -112,11 +112,11 @@ export default function Index() {
             </div>
           </div>
 
-          <div className="relative h-[600px]">
+          <div className="relative pt-0" style={{ minHeight: '850px' }}>
             {reviewsData.map((review, idx) => (
               <Card
                 key={review.id}
-                className="absolute right-0 rounded-[27px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] transition-all hover:scale-105"
+                className="absolute right-0 rounded-[27px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] transition-all hover:scale-105 bg-white"
                 style={{
                   top: review.top,
                   width: idx === 1 ? '565px' : '503.5px',
