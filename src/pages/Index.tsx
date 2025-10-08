@@ -368,6 +368,7 @@ export default function Index() {
                 ))}
               </div>
             </div>
+            </div>
 
             <div className="space-y-6">
               <div className="bg-[#1FD6A4] rounded-[20px] p-8 relative overflow-hidden">
