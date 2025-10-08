@@ -38,15 +38,7 @@ export default function Index() {
       <div className="max-w-[1400px] mx-auto px-8 pt-5">
         <header className="bg-white rounded-[30px] h-[126px] flex items-center justify-between px-10">
           <div className="flex items-center gap-2">
-            <div className="relative w-[26px] h-[26px]">
-              <div className="absolute inset-0 flex items-center justify-center">
-                <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
-                  <path d="M10.6 7.3C10.6 7.3 11.5 9.2 13.2 9.2C14.9 9.2 15.8 7.3 15.8 7.3" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M3.2 15.2C3.2 15.2 4.5 17.8 7.8 17.8C11.1 17.8 12.4 15.2 12.4 15.2" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
-                  <path d="M14.3 19.5C14.3 19.5 15.2 21.4 16.9 21.4C18.6 21.4 19.5 19.5 19.5 19.5" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
-                </svg>
-              </div>
-            </div>
+            <img src="https://cdn.poehali.dev/files/2ba51ccf-bab3-45e8-b09d-908e57367562.png" alt="Cleaner Logo" className="w-[26px] h-[26px]" />
             <div className="flex flex-col">
               <span className="text-[32px] font-bold tracking-[-0.05em] text-[#324755] leading-none" style={{ fontFamily: 'Montserrat, sans-serif' }}>Cleaner</span>
               <span className="text-[14px] tracking-[-0.03em] text-[#324755]/84" style={{ fontFamily: 'Manrope, sans-serif' }}>Для клинеров и заказчиков</span>
