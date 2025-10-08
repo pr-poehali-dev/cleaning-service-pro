@@ -1,282 +1,542 @@
 import { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Card, CardContent } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
-import { Badge } from '@/components/ui/badge';
 import Icon from '@/components/ui/icon';
 
-const services = [
-  {
-    id: 1,
-    title: 'Бытовой клининг',
-    icon: 'Home',
-    items: ['Регулярная уборка', 'Генеральная уборка', 'После ремонта', 'Химчистка'],
-    color: 'bg-blue-50 text-blue-600'
-  },
-  {
-    id: 2,
-    title: 'Коммерческий клининг',
-    icon: 'Building2',
-    items: ['Офисы', 'Мойка окон', 'Уход за полами', 'Дезинфекция'],
-    color: 'bg-cyan-50 text-cyan-600'
-  },
-  {
-    id: 3,
-    title: 'Промышленный клининг',
-    icon: 'Factory',
-    items: ['Производства', 'Дезинсекция', 'Вентиляция', 'После аварий'],
-    color: 'bg-teal-50 text-teal-600'
-  },
-  {
-    id: 4,
-    title: 'Территориальный',
-    icon: 'Trees',
-    items: ['Уборка территории', 'Вывоз ТКО', 'Ассенизаторские работы', 'Зеленые насаждения'],
-    color: 'bg-emerald-50 text-emerald-600'
-  }
+const reviewsData = [
+  { id: 1, name: 'Екатерина Скорикова', badge: 'Знаток города 6 уровня', date: '1 октября', avatar: 'Е', color: '#1FD6A4', opacity: 0.6, text: 'Ребятам даже не 5 звёзд, а 10. Почистили диван, которому уже лет 11, он как новый. Хотя, предупредили, что какие то пятна могут не вывести, но случилось чудо, и диван новый) Рекомендую...', top: '219px' },
+  { id: 2, name: 'Екатерина Скорикова', badge: 'Знаток города 6 уровня', date: '1 октября', avatar: 'Е', color: '#FF4800', opacity: 1, text: 'Ребятам даже не 5 звёзд, а 10. Почистили диван, которому уже лет 11, он как новый. Хотя, предупредили, что какие то пятна могут не вывести, но случилось чудо, и диван новый) Рекомендую...', top: '414px' },
+  { id: 3, name: 'Екатерина Скорикова', badge: 'Знаток города 6 уровня', date: '1 октября', avatar: 'Е', color: '#72C3FF', opacity: 0.6, text: 'Ребятам даже не 5 звёзд, а 10. Почистили диван, которому уже лет 11, он как новый. Хотя, предупредили, что какие то пятна могут не вывести, но случилось чудо, и диван новый) Рекомендую...', top: '623px' }
 ];
 
-const cleaners = [
-  { id: 1, name: 'Мария С.', rating: 4.9, jobs: 156, lat: 55.755, lng: 37.617 },
-  { id: 2, name: 'Анна К.', rating: 4.8, jobs: 203, lat: 55.760, lng: 37.625 },
-  { id: 3, name: 'Елена В.', rating: 5.0, jobs: 89, lat: 55.750, lng: 37.610 },
-  { id: 4, name: 'Ольга П.', rating: 4.7, jobs: 142, lat: 55.758, lng: 37.620 },
+const roomOptions = [
+  { rooms: '1 комн', area: '45м²' },
+  { rooms: '2 комн', area: '60м²' },
+  { rooms: '3 комн', area: '80м²' },
+  { rooms: '4 комн', area: '110м²' },
+  { rooms: '5 комн', area: '150м²' },
+  { rooms: '6 комн', area: '200м²' }
 ];
 
-const stats = [
-  { value: '5000+', label: 'выполненных заказов' },
-  { value: '98%', label: 'клиентов рекомендуют' },
-  { value: '4.9/5', label: 'средний рейтинг' },
+const cleaningTypes = [
+  { name: 'Экспресс' },
+  { name: 'Генеральная' },
+  { name: 'После ремонта' },
+  { name: 'После потопа' },
+  { name: 'После пожара' }
 ];
 
 export default function Index() {
-  const [selectedService, setSelectedService] = useState('');
+  const [selectedRoom, setSelectedRoom] = useState(0);
+  const [selectedCleaning, setSelectedCleaning] = useState(0);
+  const [openFaq, setOpenFaq] = useState<number | null>(null);
 
   return (
-    <div className="min-h-screen bg-surface">
+    <div className="min-h-screen bg-[#F8FAFB]">
       {/* Header */}
-      <header className="bg-white border-b border-border sticky top-0 z-50 backdrop-blur-sm bg-white/90">
-        <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-          <div className="flex items-center gap-8">
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 rounded-lg gradient-primary flex items-center justify-center">
-                <Icon name="Sparkles" size={20} className="text-white" />
+      <div className="max-w-[1400px] mx-auto px-8 pt-5">
+        <header className="bg-white rounded-[30px] h-[126px] flex items-center justify-between px-10">
+          <div className="flex items-center gap-2">
+            <div className="relative w-[26px] h-[26px]">
+              <div className="absolute inset-0 flex items-center justify-center">
+                <svg width="26" height="26" viewBox="0 0 26 26" fill="none">
+                  <path d="M10.6 7.3C10.6 7.3 11.5 9.2 13.2 9.2C14.9 9.2 15.8 7.3 15.8 7.3" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M3.2 15.2C3.2 15.2 4.5 17.8 7.8 17.8C11.1 17.8 12.4 15.2 12.4 15.2" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M14.3 19.5C14.3 19.5 15.2 21.4 16.9 21.4C18.6 21.4 19.5 19.5 19.5 19.5" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
               </div>
-              <span className="text-2xl font-heading font-bold text-foreground">CleanPro</span>
             </div>
-            
-            <button className="hidden md:flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors">
-              <Icon name="MapPin" size={16} />
-              <span>Москва</span>
-              <Icon name="ChevronDown" size={16} />
-            </button>
+            <div className="flex flex-col">
+              <span className="text-[32px] font-bold tracking-[-0.05em] text-[#324755] leading-none" style={{ fontFamily: 'Montserrat, sans-serif' }}>Cleaner</span>
+              <span className="text-[14px] tracking-[-0.03em] text-[#324755]/84" style={{ fontFamily: 'Manrope, sans-serif' }}>Для клинеров и заказчиков</span>
+            </div>
           </div>
-          
-          <div className="flex items-center gap-4">
-            <Button variant="ghost" size="sm" className="hidden md:flex">
-              <Icon name="MessageCircle" size={20} />
+
+          <nav className="flex items-center gap-[55px]">
+            <Button className="bg-[#1FD6A4] hover:bg-[#1FD6A4]/90 text-white rounded-[15px] h-[60px] px-10 font-medium text-[16px] tracking-[-0.02em]">
+              <Icon name="Calculator" size={20} className="mr-2" />
+              Калькулятор
             </Button>
-            <Button variant="outline" size="sm">
-              Войти
+            <button className="text-[18px] text-[#324755]/60 tracking-[-0.02em]">О платформе</button>
+            <button className="text-[18px] text-[#324755]/60 tracking-[-0.02em]">FAQ</button>
+            <button className="text-[18px] text-[#324755]/60 tracking-[-0.02em]">Отзывы</button>
+          </nav>
+
+          <div className="flex items-center gap-[38px]">
+            <button className="text-[18px] text-[#324755] tracking-[-0.02em]">Войти</button>
+            <Button className="bg-[#324755] hover:bg-[#324755]/90 text-white rounded-[15px] h-[71px] px-10 font-medium text-[18px] tracking-[-0.02em]">
+              Регистрация
             </Button>
           </div>
-        </div>
-      </header>
+        </header>
+      </div>
 
       {/* Hero Section */}
-      <section className="gradient-primary py-20 text-white">
-        <div className="container mx-auto px-4">
-          <div className="max-w-3xl mx-auto text-center space-y-8 animate-fade-in">
-            <div className="space-y-4">
-              <h1 className="text-4xl md:text-5xl font-heading font-bold">
-                Профессиональный клининг
-              </h1>
-              <p className="text-lg md:text-xl text-white/90">
-                Надежные исполнители для вашего пространства
-              </p>
+      <div className="max-w-[1400px] mx-auto px-8 mt-8 relative">
+        <div className="flex items-center gap-3.5 mb-6">
+          <div className="w-3 h-3 rounded-full bg-[#1FD6A4] shadow-[0px_4px_19px_rgba(31,214,164,0.36)]" />
+          <span className="text-[16px] tracking-[-0.03em] text-[#324755]">Метчер для клинеров и заказчиков</span>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8">
+          <div>
+            <h1 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-6 max-w-[761px]">
+              Чистота, которая приходит по клику, просто выбирай услугу, и клинер уже едет к тебе
+            </h1>
+            
+            <div className="flex items-center gap-2 mb-6">
+              <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4]" />
+              <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4] opacity-40" />
+              <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4] opacity-20" />
             </div>
 
-            {/* Search Form */}
-            <Card className="bg-white text-foreground shadow-xl">
-              <CardContent className="p-6">
-                <div className="grid md:grid-cols-[2fr,3fr,auto] gap-3">
-                  <Select value={selectedService} onValueChange={setSelectedService}>
-                    <SelectTrigger>
-                      <SelectValue placeholder="Вид услуги" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="home">Бытовой клининг</SelectItem>
-                      <SelectItem value="commercial">Коммерческий</SelectItem>
-                      <SelectItem value="industrial">Промышленный</SelectItem>
-                      <SelectItem value="territory">Территориальный</SelectItem>
-                    </SelectContent>
-                  </Select>
+            <p className="text-[20px] leading-[24px] tracking-[-0.01em] text-[#324755]/84 mb-8 max-w-[654px] ml-[67px]">
+              Cleaner — это агрегатор клининговых услуг. Мы соединяем заказчиков и проверенных исполнителей, чтобы уборка проходила просто, быстро и безопасно
+            </p>
 
-                  <div className="relative">
-                    <Icon name="MapPin" size={18} className="absolute left-3 top-1/2 -translate-y-1/2 text-muted-foreground" />
-                    <Input 
-                      placeholder="Адрес выполнения работ" 
-                      className="pl-10"
-                    />
-                  </div>
+            <div className="flex gap-5 mb-12">
+              <Button className="bg-[#0294FE] hover:bg-[#0294FE]/90 text-white rounded-[20px] h-[100px] px-[75px] font-medium text-[20px] tracking-[-0.03em]">
+                Найти клинера
+              </Button>
+              <Button variant="outline" className="border-[#1FD6A4]/71 text-[#324755] rounded-[20px] h-[100px] px-[75px] font-medium text-[20px] tracking-[-0.03em] hover:bg-transparent">
+                Стать клинером
+              </Button>
+            </div>
 
-                  <Button className="gradient-primary text-white hover:opacity-90 transition-opacity">
-                    <Icon name="Search" size={20} className="mr-2" />
-                    Найти
-                  </Button>
-                </div>
-              </CardContent>
-            </Card>
-          </div>
-        </div>
-      </section>
-
-      {/* Services Catalog */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12 animate-fade-in">
-            <h2 className="text-3xl font-heading font-bold mb-3">Каталог услуг</h2>
-            <p className="text-muted-foreground">Выберите подходящую категорию</p>
+            <div className="flex items-center gap-[69px]">
+              <div>
+                <div className="text-[32px] font-medium leading-[40px] text-[#324755]">10K+</div>
+                <div className="text-[16px] leading-[40px] text-[#324755]">Довольных клиентов</div>
+              </div>
+              <div>
+                <div className="text-[32px] font-medium leading-[40px] text-[#324755]">500+</div>
+                <div className="text-[16px] leading-[40px] text-[#324755]">Проверенных клинеров</div>
+              </div>
+              <div>
+                <div className="text-[32px] font-medium leading-[40px] text-[#324755]">4.9</div>
+                <div className="text-[16px] leading-[40px] text-[#324755]">Средний рейтинг</div>
+              </div>
+            </div>
           </div>
 
-          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-            {services.map((service, index) => (
-              <Card 
-                key={service.id} 
-                className="hover-scale cursor-pointer group border-border hover:border-primary transition-all duration-200"
-                style={{ animationDelay: `${index * 100}ms` }}
+          <div className="relative h-[600px]">
+            {reviewsData.map((review, idx) => (
+              <Card
+                key={review.id}
+                className="absolute right-0 rounded-[27px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] transition-all hover:scale-105"
+                style={{
+                  top: review.top,
+                  width: idx === 1 ? '565px' : '503.5px',
+                  opacity: review.opacity,
+                  zIndex: idx === 1 ? 10 : 5
+                }}
               >
-                <CardHeader>
-                  <div className={`w-12 h-12 rounded-xl ${service.color} flex items-center justify-center mb-3 group-hover:scale-110 transition-transform`}>
-                    <Icon name={service.icon as any} size={24} />
+                <CardContent className="p-7">
+                  <div className="flex items-center gap-5 mb-5">
+                    <div className="w-[63px] h-[63px] rounded-full flex items-center justify-center text-white text-[31px]" style={{ background: review.color }}>
+                      {review.avatar}
+                    </div>
+                    <div>
+                      <div className="text-[22px] text-[#324755] mb-2">{review.name}</div>
+                      <div className="text-[16px] text-[#324755]">{review.badge}</div>
+                    </div>
                   </div>
-                  <CardTitle className="text-lg">{service.title}</CardTitle>
-                </CardHeader>
-                <CardContent>
-                  <ul className="space-y-2">
-                    {service.items.map((item, idx) => (
-                      <li key={idx} className="flex items-start gap-2 text-sm text-muted-foreground">
-                        <Icon name="Check" size={16} className="text-primary mt-0.5 flex-shrink-0" />
-                        <span>{item}</span>
-                      </li>
-                    ))}
-                  </ul>
+
+                  <div className="flex items-center gap-[18px] mb-4">
+                    <div className="flex gap-1">
+                      {[...Array(5)].map((_, i) => (
+                        <div key={i} className="w-[26px] h-[26px] rounded-sm bg-[#FFCC00]" />
+                      ))}
+                    </div>
+                    <span className="text-[16px] text-[#324755]">{review.date}</span>
+                  </div>
+
+                  <p className="text-[18px] leading-[22px] text-[#324755] mb-1">{review.text}</p>
+                  <button className="text-[18px] leading-[22px] text-[#324755]/60">ещё</button>
                 </CardContent>
               </Card>
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Map Section */}
-      <section className="py-20 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-12">
-            <h2 className="text-3xl font-heading font-bold mb-3">Исполнители в вашем районе</h2>
-            <p className="text-muted-foreground">Проверенные специалисты рядом с вами</p>
+      {/* Why Choose Section */}
+      <div className="bg-white mt-20 py-20">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="flex items-center gap-3.5 mb-6">
+            <div className="w-3 h-3 rounded-full bg-[#1FD6A4] shadow-[0px_4px_19px_rgba(31,214,164,0.36)]" />
+            <span className="text-[16px] tracking-[-0.03em] text-[#324755]">Удобно и безопасно</span>
           </div>
 
-          <div className="grid lg:grid-cols-[1fr,400px] gap-6">
-            {/* Map Placeholder */}
-            <Card className="overflow-hidden">
-              <div className="relative h-[500px] bg-surface">
-                <div className="absolute inset-0 flex items-center justify-center">
-                  <div className="relative w-full h-full bg-gradient-to-br from-blue-50 to-cyan-50 opacity-50">
-                    {cleaners.map((cleaner) => (
-                      <div
-                        key={cleaner.id}
-                        className="absolute w-10 h-10 bg-primary rounded-full flex items-center justify-center text-white shadow-lg cursor-pointer hover:scale-110 transition-transform"
-                        style={{
-                          left: `${(cleaner.id * 23) % 80}%`,
-                          top: `${(cleaner.id * 31) % 70}%`,
-                        }}
-                      >
-                        <Icon name="MapPin" size={20} />
-                      </div>
-                    ))}
-                  </div>
-                </div>
-                <div className="absolute inset-0 flex items-center justify-center pointer-events-none">
-                  <div className="bg-white/90 backdrop-blur-sm px-6 py-3 rounded-lg shadow-lg">
-                    <p className="text-sm text-muted-foreground flex items-center gap-2">
-                      <Icon name="Map" size={18} className="text-primary" />
-                      Интерактивная карта исполнителей
-                    </p>
-                  </div>
-                </div>
-              </div>
-            </Card>
+          <h2 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-16">
+            Почему тысячи клиентов выбирают Cleaner?
+          </h2>
 
-            {/* Cleaners List */}
-            <div className="space-y-4">
-              {cleaners.map((cleaner) => (
-                <Card key={cleaner.id} className="hover:shadow-md transition-shadow">
-                  <CardContent className="p-4">
-                    <div className="flex items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-primary to-accent flex items-center justify-center text-white font-semibold">
-                        {cleaner.name.charAt(0)}
-                      </div>
-                      <div className="flex-1">
-                        <div className="flex items-center justify-between mb-1">
-                          <h3 className="font-semibold">{cleaner.name}</h3>
-                          <Badge variant="secondary" className="text-xs">
-                            <Icon name="Star" size={12} className="mr-1 fill-yellow-400 text-yellow-400" />
-                            {cleaner.rating}
-                          </Badge>
-                        </div>
-                        <p className="text-sm text-muted-foreground">
-                          {cleaner.jobs} выполненных заказов
-                        </p>
-                      </div>
-                    </div>
-                    <Button className="w-full mt-3" variant="outline" size="sm">
-                      Выбрать
-                    </Button>
-                  </CardContent>
-                </Card>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Stats Section */}
-      <section className="py-20">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8 max-w-4xl mx-auto">
-            {stats.map((stat, index) => (
-              <div 
-                key={index} 
-                className="text-center space-y-2 animate-fade-in"
-                style={{ animationDelay: `${index * 100}ms` }}
-              >
-                <div className="text-4xl font-heading font-bold gradient-primary bg-clip-text text-transparent">
-                  {stat.value}
-                </div>
-                <p className="text-muted-foreground">{stat.label}</p>
-              </div>
+          <div className="grid grid-cols-3 gap-5">
+            {[
+              { icon: 'CreditCard', title: 'Безопасная оплата', desc: 'Всё через защищённую систему' },
+              { icon: 'Sparkles', title: 'Быстрое бронирование', desc: 'Выбери время — и клинер уже в пути!' },
+              { icon: 'Crown', title: 'Высокий рейтинг', desc: 'Оценка 4.9 по отзывам клиентов' }
+            ].map((item, idx) => (
+              <Card key={idx} className="bg-[#F8FAFB] border-0 rounded-[30px] p-10">
+                <CardContent className="p-0">
+                  <div className="w-20 h-20 bg-white rounded-[15px] flex items-center justify-center shadow-[0px_4px_40.3px_rgba(0,0,0,0.06)] mb-36">
+                    <Icon name={item.icon as any} size={30} className="text-[#0294FE]" style={{ filter: 'drop-shadow(0px 4px 42.7px rgba(2, 148, 254, 0.2))' }} />
+                  </div>
+                  <h3 className="text-[26px] font-medium tracking-[-0.03em] text-[#324755] mb-5">{item.title}</h3>
+                  <p className="text-[18px] leading-[22px] tracking-[-0.01em] text-[#324755]">{item.desc}</p>
+                </CardContent>
+              </Card>
             ))}
           </div>
         </div>
-      </section>
+      </div>
 
-      {/* Footer */}
-      <footer className="bg-white border-t border-border py-8">
-        <div className="container mx-auto px-4">
-          <div className="flex flex-col md:flex-row items-center justify-between gap-4">
-            <div className="flex items-center gap-2">
-              <div className="w-6 h-6 rounded gradient-primary flex items-center justify-center">
-                <Icon name="Sparkles" size={14} className="text-white" />
-              </div>
-              <span className="font-heading font-semibold">CleanPro</span>
+      {/* About Platform */}
+      <div className="max-w-[1400px] mx-auto px-8 py-20">
+        <div className="grid grid-cols-2 gap-16 items-center">
+          <div>
+            <div className="flex items-center gap-3.5 mb-6">
+              <div className="w-3 h-3 rounded-full bg-[#1FD6A4] shadow-[0px_4px_19px_rgba(31,214,164,0.36)]" />
+              <span className="text-[16px] tracking-[-0.03em] text-[#324755]">О нашей платформе</span>
             </div>
-            <p className="text-sm text-muted-foreground">
-              © 2024 CleanPro. Профессиональный клининг
+
+            <h2 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-6">
+              Мы — команда, которая делает уборку простой и удобной
+            </h2>
+
+            <div className="flex items-center gap-2 mb-4">
+              <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4]" />
+              <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4] opacity-40" />
+              <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4] opacity-20" />
+            </div>
+
+            <p className="text-[20px] leading-[24px] tracking-[-0.01em] text-[#324755]/84 mb-6 ml-[67px]">
+              Cleaner — это платформа, где клиенты и клинеры находят друг друга за пару кликов
             </p>
+
+            <p className="text-[20px] leading-[24px] tracking-[-0.01em] text-[#324755] mb-12">
+              Мы верим, что чистота дома должна быть доступной каждому, а работа клинеров честной, безопасной и с достойной оплатой
+            </p>
+
+            <div className="space-y-12">
+              <div>
+                <h3 className="text-[26px] font-medium leading-[40px] tracking-[-0.03em] text-[#324755] mb-4">Мы за честность</h3>
+                <p className="text-[16px] leading-[19px] text-[#324755]">Все исполнители проходят проверку личности и рейтинга</p>
+              </div>
+              <div>
+                <h3 className="text-[26px] font-medium leading-[40px] tracking-[-0.03em] text-[#324755] mb-4">Ускоряем процесс</h3>
+                <p className="text-[16px] leading-[19px] text-[#324755]">Подбор и заказ клинера занимают меньше минуты</p>
+              </div>
+            </div>
+          </div>
+
+          <div className="h-[416px] rounded-[30px] bg-[#E1E4EB] border-[5px] border-white shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] overflow-hidden">
+            <img src="https://cdn.poehali.dev/files/88b113b9-6e51-4696-95ba-29b0f7b4d2b6.png" alt="Cleaning" className="w-full h-full object-cover" />
           </div>
         </div>
-      </footer>
+      </div>
+
+      {/* Calculator Section */}
+      <div className="bg-white py-20">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="flex items-center gap-3.5 mb-6">
+            <div className="w-3 h-3 rounded-full bg-[#1FD6A4] shadow-[0px_4px_19px_rgba(31,214,164,0.36)]" />
+            <span className="text-[16px] tracking-[-0.03em] text-[#324755]">Рассчитайте стоимость</span>
+          </div>
+
+          <h2 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-6">
+            Узнайте точную стоимость клининга в пару кликов
+          </h2>
+
+          <div className="flex items-center gap-2 mb-4">
+            <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4]" />
+            <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4] opacity-40" />
+            <div className="w-3 h-3 rounded-full border-[1.3px] border-[#1FD6A4] opacity-20" />
+          </div>
+
+          <p className="text-[20px] leading-[24px] tracking-[-0.01em] text-[#324755]/84 mb-12 ml-[67px]">
+            Введи параметры квартиры и выбери услугу — система автоматически рассчитает цену
+          </p>
+
+          <div className="grid grid-cols-[652px,1fr] gap-8">
+            <div className="space-y-12">
+              <div>
+                <div className="text-[16px] tracking-[-0.02em] text-[#324755] mb-4">Количество комнат:</div>
+                <div className="grid grid-cols-3 gap-5 mb-5">
+                  {roomOptions.slice(0, 3).map((room, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedRoom(idx)}
+                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
+                        selectedRoom === idx ? 'bg-[#324755] text-white' : 'bg-white text-black'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedRoom === idx ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[16px] tracking-[-0.02em] ${selectedRoom === idx ? 'font-medium' : ''}`}>{room.rooms}</span>
+                          <span className="text-[14px] tracking-[-0.02em]">{room.area}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <div className="grid grid-cols-3 gap-5">
+                  {roomOptions.slice(3).map((room, idx) => (
+                    <button
+                      key={idx + 3}
+                      onClick={() => setSelectedRoom(idx + 3)}
+                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
+                        selectedRoom === idx + 3 ? 'bg-[#324755] text-white' : 'bg-white text-black'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedRoom === idx + 3 ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
+                        <div className="flex items-center gap-2">
+                          <span className={`text-[16px] tracking-[-0.02em] ${selectedRoom === idx + 3 ? 'font-medium' : ''}`}>{room.rooms}</span>
+                          <span className="text-[14px] tracking-[-0.02em]">{room.area}</span>
+                        </div>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div>
+                <div className="text-[16px] tracking-[-0.02em] text-[#324755] mb-4">Тип уборки:</div>
+                <div className="grid grid-cols-3 gap-5 mb-5">
+                  {cleaningTypes.slice(0, 3).map((type, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setSelectedCleaning(idx)}
+                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
+                        selectedCleaning === idx ? 'bg-[#324755] text-white' : 'bg-white text-black'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedCleaning === idx ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
+                        <span className={`text-[14px] tracking-[-0.02em] ${selectedCleaning === idx ? 'font-medium' : ''}`}>{type.name}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+                <div className="grid grid-cols-2 gap-5">
+                  {cleaningTypes.slice(3).map((type, idx) => (
+                    <button
+                      key={idx + 3}
+                      onClick={() => setSelectedCleaning(idx + 3)}
+                      className={`h-[73px] rounded-[15px] shadow-[0px_4px_49.8px_rgba(0,0,0,0.04)] flex items-center justify-center transition-all ${
+                        selectedCleaning === idx + 3 ? 'bg-[#324755] text-white' : 'bg-white text-black'
+                      }`}
+                    >
+                      <div className="flex items-center gap-4">
+                        <div className={`w-[18px] h-[18px] rounded-full border-[1.5px] ${selectedCleaning === idx + 3 ? 'border-[#0294FE]' : 'border-[#324755]/46'}`} />
+                        <span className={`text-[14px] tracking-[-0.02em] ${selectedCleaning === idx + 3 ? 'font-medium' : ''}`}>{type.name}</span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            <div className="relative">
+              <div className="bg-[#1FD6A4] rounded-[30px] p-10 relative overflow-hidden">
+                <div className="absolute top-10 right-10 w-[160px] h-[160px] rounded-full bg-white/17" style={{ transform: 'rotate(-145.29deg)' }} />
+                <div className="absolute top-0 right-0 w-[73px] h-[73px] rounded-full bg-white/17" style={{ transform: 'rotate(-145.29deg)' }} />
+                
+                <h3 className="text-[24px] font-medium tracking-[-0.02em] text-white mb-12 relative z-10">
+                  Уборка квартиры {roomOptions[selectedRoom].rooms} ({roomOptions[selectedRoom].area})
+                </h3>
+
+                <div className="grid grid-cols-2 gap-6 mb-6 relative z-10">
+                  <div className="flex items-center gap-6">
+                    <span className="text-[18px] tracking-[-0.02em] text-white">Стоимость:</span>
+                    <span className="text-[18px] font-medium tracking-[-0.02em] text-white">от 6.000 ₽</span>
+                  </div>
+                  <div className="flex items-center gap-6">
+                    <span className="text-[18px] tracking-[-0.02em] text-white">Время уборки:</span>
+                    <span className="text-[18px] font-medium tracking-[-0.02em] text-white">2ч 45мин</span>
+                  </div>
+                </div>
+
+                <Input placeholder="Введите имя" className="h-[70px] rounded-[20px] mb-4 relative z-10" />
+                <Input placeholder="+7 (999) 999-99-99" className="h-[70px] rounded-[20px] mb-4 relative z-10" />
+                
+                <Button className="w-full h-[75px] bg-[#0294FE] hover:bg-[#0294FE]/90 text-white rounded-[20px] font-medium text-[16px] tracking-[-0.03em] mb-4 relative z-10">
+                  Заказать уборку
+                </Button>
+
+                <p className="text-[13px] leading-[135.61%] tracking-[-0.03em] text-white/68 text-center relative z-10">
+                  Отправляя запрос вы соглашаетесь с политикой конфиденциальности
+                </p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Reviews Carousel */}
+      <div className="max-w-[1400px] mx-auto px-8 py-20">
+        <div className="flex items-center gap-3.5 mb-6">
+          <div className="w-3 h-3 rounded-full bg-[#1FD6A4] shadow-[0px_4px_19px_rgba(31,214,164,0.36)]" />
+          <span className="text-[16px] tracking-[-0.03em] text-[#324755]">Отзывы о нас</span>
+        </div>
+
+        <div className="flex items-start justify-between mb-12">
+          <h2 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] max-w-[799px]">
+            Тысячи пользователей уже нашли клинеров через Cleaner
+          </h2>
+
+          <div className="flex gap-5">
+            <button className="w-[47px] h-[47px] rounded-full bg-[#1FD6A4]/40 flex items-center justify-center">
+              <Icon name="ChevronLeft" size={24} className="text-white" />
+            </button>
+            <button className="w-[47px] h-[47px] rounded-full bg-[#1FD6A4] flex items-center justify-center">
+              <Icon name="ChevronRight" size={24} className="text-white" />
+            </button>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-2 gap-8 mb-8">
+          {[0, 1].map((idx) => (
+            <Card key={idx} className="rounded-[30px] shadow-none">
+              <CardContent className="p-9">
+                <div className="flex items-center gap-5 mb-5">
+                  <div className="w-[63px] h-[63px] rounded-full bg-[#0294FE] flex items-center justify-center text-white text-[31px]">
+                    Е
+                  </div>
+                  <div>
+                    <div className="text-[22px] text-[#324755] mb-2">Екатерина Скорикова</div>
+                    <div className="text-[16px] text-[#324755]">Знаток города 6 уровня</div>
+                  </div>
+                </div>
+
+                <div className="flex items-center gap-[18px] mb-4">
+                  <div className="flex gap-1">
+                    {[...Array(5)].map((_, i) => (
+                      <div key={i} className="w-[26px] h-[26px] rounded-sm bg-[#FFCC00]" />
+                    ))}
+                  </div>
+                  <span className="text-[16px] text-[#324755]">1 октября</span>
+                </div>
+
+                <p className="text-[18px] leading-[22px] text-[#324755] mb-1">
+                  Ребятам даже не 5 звёзд, а 10. Почистили диван, которому уже лет 11, он как новый. Хотя, предупредили, что какие то пятна могут не вывести, но случилось чудо, и диван новый) Рекомендую...
+                </p>
+                <button className="text-[18px] leading-[22px] text-[#324755]/60">ещё</button>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        <div className="flex justify-center gap-5">
+          {[0, 1, 2, 3, 4].map((idx) => (
+            <div
+              key={idx}
+              className={`w-3 h-3 rounded-full ${idx === 1 ? 'bg-[#0294FE]' : 'bg-[#0294FE]/14'}`}
+            />
+          ))}
+        </div>
+      </div>
+
+      {/* FAQ */}
+      <div className="max-w-[1400px] mx-auto px-8 py-20">
+        <h2 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-12">
+          Ответы на популярные вопросы
+        </h2>
+
+        <div className="space-y-6">
+          {[
+            'Как выбрать клинера через Cleaner?',
+            'Можно ли доверять исполнителям?',
+            'Что делать, если клинер не пришёл?',
+            'Как оставить отзыв о клинере?',
+            'Как стать исполнителем на платформе?'
+          ].map((question, idx) => (
+            <button
+              key={idx}
+              onClick={() => setOpenFaq(openFaq === idx ? null : idx)}
+              className="w-full bg-white rounded-[20px] p-10 flex items-center justify-between hover:shadow-lg transition-shadow"
+            >
+              <span className="text-[20px] tracking-[-0.01em] text-[#324755]">{question}</span>
+              <div className="w-[47px] h-[47px] rounded-full bg-[#1FD6A4] flex items-center justify-center transform -rotate-90">
+                <Icon name="ChevronDown" size={24} className="text-white" />
+              </div>
+            </button>
+          ))}
+        </div>
+      </div>
+
+      {/* CTA Banner */}
+      <div className="max-w-[1400px] mx-auto px-8 py-20">
+        <div className="relative rounded-[30px] p-16 text-center overflow-hidden" style={{ background: 'linear-gradient(107.77deg, #1FD6A4 37.86%, #33EBB9 86.4%)' }}>
+          <div className="absolute top-20 left-16 w-[178px] h-[178px] rounded-full bg-white/21" style={{ transform: 'rotate(-124.51deg)' }} />
+          <div className="absolute top-32 left-0 w-[81px] h-[81px] rounded-full bg-white/21" style={{ transform: 'rotate(-124.51deg)' }} />
+          <div className="absolute bottom-16 right-16 w-[172px] h-[172px] rounded-full bg-white/21" style={{ transform: 'rotate(-5.42deg)' }} />
+          <div className="absolute bottom-24 right-0 w-[78px] h-[78px] rounded-full bg-white/21" style={{ transform: 'rotate(-5.42deg)' }} />
+
+          <h2 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-white mb-6 max-w-[830px] mx-auto relative z-10">
+            Закажи уборку в пару кликов, а всё остальное сделает Cleaner
+          </h2>
+          
+          <p className="text-[20px] leading-[24px] tracking-[-0.01em] text-white mb-12 relative z-10">
+            Cleaner — агрегатор, который соединяет клиентов и клинеров
+          </p>
+
+          <Button className="bg-[#324755] hover:bg-[#324755]/90 text-white rounded-[20px] h-[100px] px-[75px] font-medium text-[20px] tracking-[-0.03em] relative z-10">
+            Заказать клининг
+          </Button>
+        </div>
+      </div>
+
+      {/* Footer */}
+      <div className="bg-white rounded-t-[30px] py-12 mt-20">
+        <div className="max-w-[1400px] mx-auto px-8">
+          <div className="flex items-center justify-between mb-12">
+            <div className="flex items-center gap-2">
+              <div className="relative w-[30px] h-[30px]">
+                <svg width="30" height="30" viewBox="0 0 30 30" fill="none">
+                  <path d="M12.2 8.4C12.2 8.4 13.3 10.6 15.2 10.6C17.1 10.6 18.2 8.4 18.2 8.4" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M3.7 17.5C3.7 17.5 5.2 20.5 9 20.5C12.8 20.5 14.3 17.5 14.3 17.5" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
+                  <path d="M16.5 22.5C16.5 22.5 17.5 24.7 19.5 24.7C21.5 24.7 22.5 22.5 22.5 22.5" stroke="#0294FE" strokeWidth="2" strokeLinecap="round"/>
+                </svg>
+              </div>
+              <span className="text-[37px] font-bold tracking-[-0.05em] text-[#324755]" style={{ fontFamily: 'Montserrat, sans-serif' }}>Cleaner</span>
+            </div>
+
+            <div className="flex items-center gap-[55px]">
+              <button className="flex items-center gap-2 text-[18px] tracking-[-0.02em] text-[#324755] font-medium">
+                <Icon name="Calculator" size={20} />
+                Калькулятор
+              </button>
+              <button className="text-[18px] text-[#324755]/60 tracking-[-0.02em]">О платформе</button>
+              <button className="text-[18px] text-[#324755]/60 tracking-[-0.02em]">FAQ</button>
+              <button className="text-[18px] text-[#324755]/60 tracking-[-0.02em]">Отзывы</button>
+            </div>
+
+            <div className="flex items-center gap-5">
+              <Button variant="outline" className="border-[#0294FE] text-[#324755] rounded-[15px] h-[71px] px-10 text-[18px] tracking-[-0.02em] hover:bg-transparent">
+                Войти
+              </Button>
+              <Button className="bg-[#0294FE] hover:bg-[#0294FE]/90 text-white rounded-[15px] h-[71px] px-10 font-medium text-[18px] tracking-[-0.02em]">
+                Регистрация
+              </Button>
+            </div>
+          </div>
+
+          <div className="border-t border-[#324755]/11 pt-6">
+            <div className="flex items-center justify-between">
+              <span className="text-[16px] tracking-[-0.02em] text-[#324755]">© 2025 Cleaner. Все права защищены</span>
+              <div className="flex items-center gap-[70px] opacity-70">
+                <button className="text-[16px] tracking-[-0.02em] text-[#324755] underline">Политика конфиденциальности</button>
+                <button className="text-[16px] tracking-[-0.02em] text-[#324755] underline">Пользовательское соглашение</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }
