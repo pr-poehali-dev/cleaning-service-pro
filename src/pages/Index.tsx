@@ -66,13 +66,13 @@ export default function Index() {
       </div>
 
       {/* Hero Section */}
-      <div className="max-w-[1400px] mx-auto px-8 mt-8">
+      <div className="min-h-[calc(100vh-146px)] max-w-[1400px] mx-auto px-8 mt-8 flex flex-col">
         <div className="flex items-center gap-3.5 mb-6">
           <div className="w-3 h-3 rounded-full bg-[#1FD6A4] shadow-[0px_4px_19px_rgba(31,214,164,0.36)]" />
           <span className="text-[16px] tracking-[-0.03em] text-[#324755]">Метчер для клинеров и заказчиков</span>
         </div>
 
-        <div className="grid grid-cols-[1fr_600px] gap-8 items-start">
+        <div className="grid grid-cols-[1fr_600px] gap-8 items-start flex-1">
           <div className="max-w-[761px]">
             <h1 className="text-[44px] font-medium leading-[135.61%] tracking-[-0.03em] text-[#324755] mb-6">
               Чистота, которая приходит по клику, просто выбирай услугу, и клинер уже едет к тебе
