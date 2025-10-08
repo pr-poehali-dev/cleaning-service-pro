@@ -253,7 +253,8 @@ export default function Index() {
             Введи параметры квартиры и выбери услугу — система автоматически рассчитает цену
           </p>
 
-          <div className="space-y-12">
+          <div className="grid grid-cols-[1fr_400px] gap-12">
+            <div className="space-y-12">
             <div>
               <div className="text-[20px] tracking-[-0.02em] text-[#324755] mb-6">Количество комнат:</div>
               <div className="grid grid-cols-3 gap-5 mb-5">
@@ -367,46 +368,35 @@ export default function Index() {
                 ))}
               </div>
             </div>
-          </div>
-        </div>
-      </div>
 
-      {/* Price Card */}
-      <div className="bg-white py-4 pb-20">
-        <div className="max-w-[1400px] mx-auto px-8">
-          <div className="grid grid-cols-[1fr_652px] gap-8">
-            <div />
-            <div className="relative -mt-12">
-              <div className="bg-[#1FD6A4] rounded-[30px] p-10 relative overflow-hidden">
-                <div className="absolute top-10 right-10 w-[160px] h-[160px] rounded-full bg-white/17" style={{ transform: 'rotate(-145.29deg)' }} />
-                <div className="absolute top-0 right-0 w-[73px] h-[73px] rounded-full bg-white/17" style={{ transform: 'rotate(-145.29deg)' }} />
-                
-                <h3 className="text-[24px] font-medium tracking-[-0.02em] text-white mb-12 relative z-10">
-                  Уборка квартиры {roomOptions[selectedRoom].rooms} ({roomOptions[selectedRoom].area})
+            <div className="space-y-6">
+              <div className="bg-[#1FD6A4] rounded-[20px] p-8 relative overflow-hidden">
+                <h3 className="text-[20px] font-medium tracking-[-0.02em] text-white mb-6 relative z-10">
+                  Уборка квартиры {roomOptions[selectedRoom].rooms} ({sliderValue}м²)
                 </h3>
 
-                <div className="grid grid-cols-2 gap-6 mb-6 relative z-10">
-                  <div className="flex items-center gap-6">
-                    <span className="text-[18px] tracking-[-0.02em] text-white">Стоимость:</span>
-                    <span className="text-[18px] font-medium tracking-[-0.02em] text-white">от 6.000 ₽</span>
+                <div className="space-y-4 mb-6 relative z-10">
+                  <div className="flex items-center justify-between">
+                    <span className="text-[16px] tracking-[-0.02em] text-white">Стоимость:</span>
+                    <span className="text-[16px] font-medium tracking-[-0.02em] text-white">от 6.000 ₽</span>
                   </div>
-                  <div className="flex items-center gap-6">
-                    <span className="text-[18px] tracking-[-0.02em] text-white">Время уборки:</span>
-                    <span className="text-[18px] font-medium tracking-[-0.02em] text-white">2ч 45мин</span>
+                  <div className="flex items-center justify-between">
+                    <span className="text-[16px] tracking-[-0.02em] text-white">Время уборки:</span>
+                    <span className="text-[16px] font-medium tracking-[-0.02em] text-white">2ч 45мин</span>
                   </div>
                 </div>
-
-                <Input placeholder="Введите имя" className="h-[70px] rounded-[20px] mb-4 relative z-10" />
-                <Input placeholder="+7 (999) 999-99-99" className="h-[70px] rounded-[20px] mb-4 relative z-10" />
-                
-                <Button className="w-full h-[75px] bg-[#0294FE] hover:bg-[#0294FE]/90 text-white rounded-[20px] font-medium text-[16px] tracking-[-0.03em] mb-4 relative z-10">
-                  Заказать уборку
-                </Button>
-
-                <p className="text-[13px] leading-[135.61%] tracking-[-0.03em] text-white/68 text-center relative z-10">
-                  Отправляя запрос вы соглашаетесь с политикой конфиденциальности
-                </p>
               </div>
+
+              <Input placeholder="Введите имя" className="h-[60px] rounded-[15px] bg-white border-0" />
+              <Input placeholder="+7 (999) 999-99-99" className="h-[60px] rounded-[15px] bg-white border-0" />
+              
+              <Button className="w-full h-[60px] bg-[#0294FE] hover:bg-[#0294FE]/90 text-white rounded-[15px] font-medium text-[16px] tracking-[-0.03em]">
+                Заказать уборку
+              </Button>
+
+              <p className="text-[13px] leading-[135.61%] tracking-[-0.03em] text-[#324755]/68 text-center">
+                Отправляя запрос вы соглашаетесь с <button className="underline">политикой конфиденциальности</button>
+              </p>
             </div>
           </div>
         </div>
